@@ -1,0 +1,5 @@
+name: ForeignSentry
+version: '${project.version}'
+main: online.darklounge.foreignsentry.ForeignSentry
+api-version: 1.19
+authors: [Giotto88]
