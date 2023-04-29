@@ -3,3 +3,7 @@ version: '${project.version}'
 main: online.darklounge.foreignsentry.ForeignSentry
 api-version: 1.19
 authors: [Giotto88]
+commands:
+  psk:
+    description: Magic word to get not banned
+    usage: /<command> <password>
