@@ -8,31 +8,36 @@ import java.util.Date;
 
 public class AuthedUsers {
 
-    private final int NDAY = 5; // Giorni per considerare valido il login
-    private HashMap<String, Long> authRegistry;
+    //private final int NDAY = (int) ForeignSentry.GlobalConfig.getConfig().get("sessionsTimeout"); // Giorni per considerare valido il login
+    private int NDAY = 5;
+    private final HashMap<String, Long> authRegistry;
 
     public AuthedUsers() {
         this.authRegistry = new HashMap<>();
     }
 
+    public AuthedUsers(int NDAY) {
+        this.authRegistry = new HashMap<>();
+        this.NDAY = NDAY;
+    }
+
     /**
      * Aggiungi una entry composta da nome utente più ip all'interno della hashmap
-     * @param username
-     * @param ip
-     * @return
+     * @param username client username
+     * @param ip client ip
      */
-    public boolean addPlayer(String username, String ip){
+    public void addPlayer(String username, String ip){
         Date currentDate = new Date();
         authRegistry.put(username+":"+ip,currentDate.getTime());
-        System.out.println(">> LOGIN: "+username+":"+ip+" at: "+currentDate.getTime());
+        Bukkit.getLogger().info(">> LOGIN: "+username+":"+ip+" at: "+currentDate.getTime());
         //Bukkit.getLogger().info(">> LOGIN: "+username+":"+ip+" at: "+currentDate.getTime());
-        return true;
     }
 
     public boolean isAlreadyLogged(String username, String ip){
         Date currentDate = new Date();
         Long lastlogin = authRegistry.get(username+":"+ip);
-        return lastlogin != null && ( currentDate.getTime() - lastlogin ) < (86400 * NDAY);
+        Bukkit.getLogger().info("AUTH STATUS: "+lastlogin);
+        return lastlogin != null && ( currentDate.getTime() - lastlogin ) < (86400L * NDAY);
     }
 
     public void removePlayer(String username, String ip){

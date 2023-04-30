@@ -7,3 +7,4 @@ commands:
   psk:
     description: Magic word to get not banned
     usage: /<command> <password>
+    aliases: [login,password]

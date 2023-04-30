@@ -2,19 +2,17 @@ package online.darklounge.foreignsentry.commands;
 
 
 import online.darklounge.foreignsentry.ForeignSentry;
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
+import org.bukkit.GameMode;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-
 import java.util.Objects;
 
-import static org.bukkit.Bukkit.getLogger;
-
 public class psk implements CommandExecutor {
+
+
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if( sender instanceof Player){
@@ -22,13 +20,27 @@ public class psk implements CommandExecutor {
             String name = player.getName();
             String ip = Objects.requireNonNull(player.getAddress()).getAddress().getHostAddress();
 
+            /*
+            give item on login
             ItemStack piccone = new ItemStack(Material.STONE_SWORD,1);
-
             player.getInventory().addItem(piccone);
-            Bukkit.getLogger().info(ForeignSentry.pippoHashMap.toString());
-            ForeignSentry.pippoHashMap.addPlayer(name,ip);
+
+            itera su args
+            for(String arg : args){
+                Bukkit.getLogger().info(arg);
+            }
+            */
+
+            if(args.length > 0 && args[0].equals(ForeignSentry.GlobalConfig.getConfig().get("password")) && !ForeignSentry.pippoHashMap.isAlreadyLogged(name,ip) ){
+                //ADD THE plAYER TO THE AUTHED LIST OF PLAYER
+                ForeignSentry.pippoHashMap.addPlayer(name,ip);
+                player.setGameMode(GameMode.SURVIVAL);
+            }
+
             //Bukkit.unbanIP(ip);
             //getLogger().info("IP unbanned");
+        } else {
+            sender.sendMessage("Only player can run this command.");
         }
         return true;
     }
