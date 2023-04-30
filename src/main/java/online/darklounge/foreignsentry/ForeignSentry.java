@@ -2,17 +2,16 @@ package online.darklounge.foreignsentry;
 
 import online.darklounge.foreignsentry.commands.psk;
 import online.darklounge.foreignsentry.handler.ConnectionHandler;
-//import online.darklounge.foreignsentry.commands.Secretasked;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import org.bukkit.ChatColor;
 import org.bukkit.event.Listener;
-
-import java.util.logging.Level;
+import org.checkerframework.checker.units.qual.A;
 
 public final class ForeignSentry extends JavaPlugin implements Listener {
+
+    public static AuthedUsers pippoHashMap = new AuthedUsers();
 
     @Override
     public void onEnable() {

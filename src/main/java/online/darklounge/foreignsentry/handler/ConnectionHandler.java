@@ -1,20 +1,19 @@
 package online.darklounge.foreignsentry.handler;
 
+import online.darklounge.foreignsentry.AuthedUsers;
 import online.darklounge.foreignsentry.ForeignSentry;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-//import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 import java.util.Objects;
-//import org.bukkit.scheduler.BukkitRunnable;
 
-public class ConnectionHandler implements Listener{
+public class ConnectionHandler implements Listener {
     public ConnectionHandler(ForeignSentry plugin){
         Bukkit.getPluginManager().registerEvents(this, plugin);
     }
@@ -27,7 +26,9 @@ public class ConnectionHandler implements Listener{
 
         // Logga il nome dell'utente alla connessione
         Bukkit.getLogger().warning("Gotcha "+name+":"+ip);
-        Bukkit.banIP(player.getAddress().getAddress().getHostAddress());
+
+
+        //Bukkit.banIP(player.getAddress().getAddress().getHostAddress());
 
     }
 
