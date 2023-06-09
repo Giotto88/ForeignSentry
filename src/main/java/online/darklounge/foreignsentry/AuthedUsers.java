@@ -30,7 +30,6 @@ public class AuthedUsers {
         Date currentDate = new Date();
         authRegistry.put(username+":"+ip,currentDate.getTime());
         Bukkit.getLogger().info(">> LOGIN: "+username+":"+ip+" at: "+currentDate.getTime());
-        //Bukkit.getLogger().info(">> LOGIN: "+username+":"+ip+" at: "+currentDate.getTime());
     }
 
     public boolean isAlreadyLogged(String username, String ip){
@@ -42,6 +41,10 @@ public class AuthedUsers {
 
     public void removePlayer(String username, String ip){
         authRegistry.remove(username+":"+ip);
+    }
+
+    public void reset() {
+        authRegistry.clear();
     }
 
 }

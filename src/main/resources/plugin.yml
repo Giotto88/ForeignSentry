@@ -1,5 +1,5 @@
 name: ForeignSentry
-version: '${project.version}'
+version: '0.1'
 main: online.darklounge.foreignsentry.ForeignSentry
 api-version: 1.19
 authors: [Giotto88]
@@ -8,3 +8,7 @@ commands:
     description: Magic word to get not banned
     usage: /<command> <password>
     aliases: [login,password]
+  foreignsentry:
+    description: General purpose, ancora da implementare i sotto comandi
+    usage: /fk reset
+    aliases: [fk]
