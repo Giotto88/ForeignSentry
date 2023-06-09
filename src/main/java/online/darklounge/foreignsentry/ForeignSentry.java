@@ -1,5 +1,6 @@
 package online.darklounge.foreignsentry;
 
+import online.darklounge.foreignsentry.commands.AuthedUserManager;
 import online.darklounge.foreignsentry.commands.psk;
 import online.darklounge.foreignsentry.handler.ConnectionHandler;
 import online.darklounge.foreignsentry.util.ConfigUtil;
@@ -20,8 +21,7 @@ public final class ForeignSentry extends JavaPlugin implements Listener {
     @Override
     public void onEnable() {
         // Plugin startup logic
-        getLogger().info("Hello world");
-
+        getLogger().info("ForeignSentry > START!");
         saveDefaultConfig();
 
         /* Loop on a config file
@@ -32,33 +32,34 @@ public final class ForeignSentry extends JavaPlugin implements Listener {
         */
 
         GlobalConfig = new ConfigUtil(this, "config.yml");
-        /* Get and set to add things on config file
-        //Bukkit.getLogger().info("> CONFIG sessionsTimeout: "+GlobalConfig.getConfig().get("sessionsTimeout"));
-        //GlobalConfig.getConfig().set("hello","world");
-        //config.save();
-
+        /* Get and set to write things on config file
+            Bukkit.getLogger().info("> CONFIG sessionsTimeout: "+GlobalConfig.getConfig().get("sessionsTimeout"));
+            GlobalConfig.getConfig().set("hello","world");
+            config.save();
          */
 
-        pippoHashMap = new AuthedUsers((int)GlobalConfig.getConfig().get("sessionsTimeout"));
+        pippoHashMap = new AuthedUsers((int) GlobalConfig.getConfig().get("sessionsTimeout"));
 
         new ConnectionHandler(this);
         new DelayedTask(this);
 
         // Register our command "kit" (set an instance of your command class as executor)
-        Objects.requireNonNull(this.getCommand("psk")).setExecutor(new psk());
+        Objects.requireNonNull(getCommand("login")).setExecutor(new psk());
+        Objects.requireNonNull(getCommand("fk")).setExecutor(new AuthedUserManager());
     }
 
     @Override
     public void onDisable() {
         // Plugin shutdown logic
-        getLogger().info("Goodbye world");
+        getLogger().info("ForeignSentry > END!");
     }
 
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args){
-        getLogger().info(sender.getName()+"ha tirato il comando: "+command.getName());
-        return true;
-        //return super.onCommand(sender, command, label, args);
-    }
+// Handler
+//    public boolean onCommand(CommandSender sender, Command command, String label, String[] args){
+//        getLogger().info(sender.getName()+"ha tirato il comando: "+command.getName());
+//        return true;
+//        //return super.onCommand(sender, command, label, args);
+//    }
 
 
 }

@@ -1,8 +1,12 @@
 package online.darklounge.foreignsentry.handler;
 
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
+
 import online.darklounge.foreignsentry.ForeignSentry;
 import online.darklounge.foreignsentry.util.DelayedTask;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -16,6 +20,10 @@ public class ConnectionHandler implements Listener {
         Bukkit.getPluginManager().registerEvents(this, plugin);
     }
 
+    /**
+     * @param e Registra gli eventi di join.
+     * @apiNote Ogni volta che un giocatore entra esegui questi comandi
+     */
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent e) {
         // STEP 1
@@ -26,11 +34,15 @@ public class ConnectionHandler implements Listener {
         player.setGameMode(GameMode.ADVENTURE);
         // STEP 3
         if(!ForeignSentry.pippoHashMap.isAlreadyLogged(name,ip)){
+            player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent("|||||||||||!YAY!|||||||||||"));
             player.sendMessage("Login using /psk <password>");
             player.sendMessage("Wrong password lead to ip-ban");
             DelayedTask task = new DelayedTask(() -> {
                 if(ForeignSentry.pippoHashMap.isAlreadyLogged(name,ip)){
                     Bukkit.getLogger().info("OK you stay!!!!!!!!!!!!!!");
+
+                    player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.GOLD.toString() +"|||||||||||! WELCOME BACK! !|||||||||||"));
+
                 }else{
                     Bukkit.getLogger().info(">> LOGIN FAILED");
                     if((Boolean) ForeignSentry.GlobalConfig.getConfig().get("RealBan")){
@@ -48,12 +60,12 @@ public class ConnectionHandler implements Listener {
             player.setGameMode(GameMode.SURVIVAL);
         }
 
-
         // Logga il nome dell'utente alla connessione
         // Bukkit.getLogger().info("Gotcha "+name+":"+ip);
 
-
-        //Bukkit.banIP(player.getAddress().getAddress().getHostAddress());
+        if((Boolean) ForeignSentry.GlobalConfig.getConfig().get("RealBan")){
+            Bukkit.unbanIP(ip);
+        }
 
     }
 
