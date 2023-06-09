@@ -15,7 +15,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 
 import java.util.Objects;
 
-public class ConnectionHandler implements Listener {
+public class ConnectionHandler extends ForeignSentry implements Listener {
     public ConnectionHandler(ForeignSentry plugin){
         Bukkit.getPluginManager().registerEvents(this, plugin);
     }
@@ -33,19 +33,19 @@ public class ConnectionHandler implements Listener {
         // STEP 2
         player.setGameMode(GameMode.ADVENTURE);
         // STEP 3
-        if(!ForeignSentry.pippoHashMap.isAlreadyLogged(name,ip)){
+        if(!pippoHashMap.isAlreadyLogged(name,ip)){
             player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent("|||||||||||!YAY!|||||||||||"));
             player.sendMessage("Login using /psk <password>");
             player.sendMessage("Wrong password lead to ip-ban");
             DelayedTask task = new DelayedTask(() -> {
-                if(ForeignSentry.pippoHashMap.isAlreadyLogged(name,ip)){
+                if(pippoHashMap.isAlreadyLogged(name,ip)){
                     Bukkit.getLogger().info("OK you stay!!!!!!!!!!!!!!");
 
-                    player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.GOLD.toString() +"|||||||||||! WELCOME BACK! !|||||||||||"));
+                    player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.GOLD +"|||||||||||! WELCOME BACK! !|||||||||||"));
 
                 }else{
                     Bukkit.getLogger().info(">> LOGIN FAILED");
-                    if((Boolean) ForeignSentry.GlobalConfig.getConfig().get("RealBan")){
+                    if((Boolean) GlobalConfig.getConfig().get("RealBan")){
                         Bukkit.banIP(ip);
                         player.kickPlayer("HAHA YOU GOT BANNED!!!!!!!!!!!!!!");
                     }else{
@@ -63,7 +63,7 @@ public class ConnectionHandler implements Listener {
         // Logga il nome dell'utente alla connessione
         // Bukkit.getLogger().info("Gotcha "+name+":"+ip);
 
-        if((Boolean) ForeignSentry.GlobalConfig.getConfig().get("RealBan")){
+        if((Boolean) GlobalConfig.getConfig().get("RealBan")){
             Bukkit.unbanIP(ip);
         }
 

@@ -13,7 +13,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import java.util.Objects;
 
-public class psk implements CommandExecutor {
+public class psk extends ForeignSentry implements CommandExecutor {
 
 
     /**
@@ -48,10 +48,10 @@ public class psk implements CommandExecutor {
             // SE gli argomenti sono almeno uno, e il primo argomento è uguale alla password presente nella configurazione e l'utente non è gia autenticato
             // ALLORA segna che l'utente si è autenticato con nome e ip e imposta la sua modalità di gioco a survival
             // INOLTRE rimuovi il ban preventivo se l'autenticazione è andata a buon fine
-            if (args.length > 0 && args[0].equals(ForeignSentry.GlobalConfig.getConfig().get("password")) && !ForeignSentry.pippoHashMap.isAlreadyLogged(name,ip) ) {
+            if (args.length > 0 && args[0].equals(GlobalConfig.getConfig().get("password")) && !pippoHashMap.isAlreadyLogged(name,ip) ) {
                 //ADD THE plAYER TO THE AUTHED LIST OF PLAYER
-                ForeignSentry.pippoHashMap.addPlayer(name,ip);
-                player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.GREEN.toString() +"password corretta"));
+                pippoHashMap.addPlayer(name,ip);
+                player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.GREEN +"password corretta"));
                 player.setGameMode(GameMode.SURVIVAL);
             }
         } else {

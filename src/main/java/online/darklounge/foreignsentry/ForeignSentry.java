@@ -13,10 +13,10 @@ import org.bukkit.event.Listener;
 
 import java.util.Objects;
 
-public final class ForeignSentry extends JavaPlugin implements Listener {
+public class ForeignSentry extends JavaPlugin implements Listener {
 
-    public static ConfigUtil GlobalConfig;
-    public static AuthedUsers pippoHashMap;
+    protected ConfigUtil GlobalConfig;
+    protected AuthedUsers pippoHashMap;
 
     @Override
     public void onEnable() {
