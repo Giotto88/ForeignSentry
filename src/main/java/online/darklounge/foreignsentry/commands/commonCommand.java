@@ -10,9 +10,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.Objects;
-
-import online.darklounge.foreignsentry.ForeignSentry;
 public class commonCommand implements CommandExecutor {
 
     private final Object GlobalConfig;

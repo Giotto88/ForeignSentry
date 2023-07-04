@@ -22,7 +22,7 @@ public class ConnectionHandler implements Listener  {
     private Long tempoMassimoAccesso = 10L;
     private final ListaSessioni listaAutenticazioni;
     private final ListaTentativiAccesso listaTentativiAccesso;
-    private final Boolean configRealBan;
+    private final boolean configRealBan;
 
 
     public ConnectionHandler(ForeignSentry plugin, ConfigManager globalConfig, ListaSessioni listaAutenticazioni, ListaTentativiAccesso listaTentativiAccesso) {
@@ -30,7 +30,7 @@ public class ConnectionHandler implements Listener  {
         this.tempoMassimoAccesso = (long) globalConfig.getInteger("tempoMassimoAccesso");
         this.listaAutenticazioni = listaAutenticazioni;
         this.listaTentativiAccesso = listaTentativiAccesso;
-        this.configRealBan = (Boolean) globalConfig.getConfig().get("RealBan");
+        this.configRealBan = globalConfig.getBoolean("RealBan");
     }
 
     /**

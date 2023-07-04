@@ -42,7 +42,7 @@ public class ConfigManager {
         return this.config;
     }
 
-    public Boolean getBoolean(String x){
+    public boolean getBoolean(String x){
         return config.getBoolean(x);
     }
 
