@@ -53,10 +53,9 @@ public class loginCommand implements CommandExecutor {
             if ( args.length > 0 && args[0].equals(GlobalConfig.getConfig().get("password")) && !listaAutenticazioni.isAlreadyLogged(name,ip) ) {
 
                 listaAutenticazioni.aggiungiPlayer(name,ip);
-                for(int i=0;i<2;i++){
-                    player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.GREEN +"password corretta"));
-                }
                 player.setGameMode(GameMode.SURVIVAL);
+
+                player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.GREEN +"password corretta"));
 
             }else{
                 sender.sendMessage(ChatColor.RED +"sintassi comando o password errata");

@@ -22,14 +22,15 @@ public class ConnectionHandler implements Listener  {
     private Long tempoMassimoAccesso = 10L;
     private final ListaSessioni listaAutenticazioni;
     private final ListaTentativiAccesso listaTentativiAccesso;
-    private final ConfigManager GlobalConfig;
+    private final Boolean configRealBan;
 
-    public ConnectionHandler(ForeignSentry plugin, Long tempoMassimoAccesso,ConfigManager globalConfig, ListaSessioni listaAutenticazioni, ListaTentativiAccesso listaTentativiAccesso) {
+
+    public ConnectionHandler(ForeignSentry plugin, ConfigManager globalConfig, ListaSessioni listaAutenticazioni, ListaTentativiAccesso listaTentativiAccesso) {
         Bukkit.getPluginManager().registerEvents(this, plugin);
-        this.tempoMassimoAccesso = tempoMassimoAccesso;
-        this.GlobalConfig = globalConfig;
+        this.tempoMassimoAccesso = (long) globalConfig.getInteger("tempoMassimoAccesso");
         this.listaAutenticazioni = listaAutenticazioni;
         this.listaTentativiAccesso = listaTentativiAccesso;
+        this.configRealBan = (Boolean) globalConfig.getConfig().get("RealBan");
     }
 
     /**
@@ -44,11 +45,10 @@ public class ConnectionHandler implements Listener  {
         String ip = Objects.requireNonNull(player.getAddress()).getAddress().getHostAddress();
 
         // Logga il nome dell'utente alla connessione
-        Bukkit.getLogger().info("Connessione stabilita. USERNAME: "+name+" IP: "+ip);
+        // Bukkit.getLogger().info("Connessione stabilita. USERNAME: "+name+" IP: "+ip);
 
         // STEP 2 - secure the world from foreign
         player.setGameMode(GameMode.ADVENTURE);
-
 
         // STEP 3 - check permission
         if(!listaAutenticazioni.isAlreadyLogged(name,ip)){
@@ -62,12 +62,14 @@ public class ConnectionHandler implements Listener  {
                     // >> Accesso riuscito
                     //Bukkit.getLogger().info("OK you stay!!!!!!!!!!!!!!");
                     player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.GOLD +"|||||||||||! WELCOME BACK! !|||||||||||"));
+                    player.setGameMode(GameMode.SURVIVAL);
+                    if(configRealBan){
+                        Bukkit.unbanIP(ip);
+                    }
                 }else{
                     // >> Accesso negato
-                    Bukkit.getLogger().warning(player.getAddress().getAddress()+"<-----");
                     listaTentativiAccesso.setListaTentativiAccesso(player.getAddress().getAddress());
-
-                    if((Boolean) GlobalConfig.getConfig().get("RealBan")){
+                    if(configRealBan){
                         Bukkit.banIP(ip);
                         player.kickPlayer("HAHA YOU GOT BANNED!!!!!!!!!!!!!!");
                     }else{
@@ -80,12 +82,6 @@ public class ConnectionHandler implements Listener  {
                 //action after the delay will be executed before the timer end
 
             },20 * tempoMassimoAccesso);
-        }
-
-        player.setGameMode(GameMode.SURVIVAL);
-
-        if((Boolean) GlobalConfig.getConfig().get("RealBan")){
-            Bukkit.unbanIP(ip);
         }
 
     }

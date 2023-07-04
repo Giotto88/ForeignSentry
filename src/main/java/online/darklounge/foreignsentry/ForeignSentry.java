@@ -31,7 +31,7 @@ public class ForeignSentry extends JavaPlugin implements Listener {
         listaTentativiAccesso = new ListaTentativiAccesso();
 
         /* Handler da gestire */
-        new ConnectionHandler(this,10L,GlobalConfig,listaAutenticazioni,listaTentativiAccesso);
+        new ConnectionHandler(this,GlobalConfig,listaAutenticazioni,listaTentativiAccesso);
         new DelayedTask(this);
 
         /*

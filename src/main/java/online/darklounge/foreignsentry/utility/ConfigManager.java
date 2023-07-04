@@ -41,4 +41,16 @@ public class ConfigManager {
     public FileConfiguration getConfig() {
         return this.config;
     }
+
+    public Boolean getBoolean(String x){
+        return config.getBoolean(x);
+    }
+
+    public String getText(String x){
+        return config.getString(x);
+    }
+
+    public Integer getInteger(String x){
+        return config.getInt(x);
+    }
 }
