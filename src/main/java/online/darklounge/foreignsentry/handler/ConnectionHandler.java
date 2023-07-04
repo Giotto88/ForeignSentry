@@ -4,7 +4,8 @@ import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 
 import online.darklounge.foreignsentry.ForeignSentry;
-import online.darklounge.foreignsentry.util.DelayedTask;
+import online.darklounge.foreignsentry.localDatabase.ListaTentativiAccesso;
+import online.darklounge.foreignsentry.utility.DelayedTask;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
@@ -16,8 +17,12 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import java.util.Objects;
 
 public class ConnectionHandler extends ForeignSentry implements Listener {
-    public ConnectionHandler(ForeignSentry plugin){
+
+    private final long tempoMassimoAccesso;
+
+    public ConnectionHandler(ForeignSentry plugin,int tempoMassimoAccesso){
         Bukkit.getPluginManager().registerEvents(this, plugin);
+        this.tempoMassimoAccesso = tempoMassimoAccesso;
     }
 
     /**
@@ -26,42 +31,50 @@ public class ConnectionHandler extends ForeignSentry implements Listener {
      */
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent e) {
-        // STEP 1
+        // STEP 1 - get information
         Player player = e.getPlayer();
         String name = player.getName();
         String ip = Objects.requireNonNull(player.getAddress()).getAddress().getHostAddress();
-        // STEP 2
+
+        // Logga il nome dell'utente alla connessione
+        Bukkit.getLogger().info("Connessione stabilita. USERNAME: "+name+" IP: "+ip);
+
+        // STEP 2 - secure the world from foreign
         player.setGameMode(GameMode.ADVENTURE);
-        // STEP 3
-        if(!pippoHashMap.isAlreadyLogged(name,ip)){
-            player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent("|||||||||||!YAY!|||||||||||"));
-            player.sendMessage("Login using /psk <password>");
+
+        // STEP 3 - check permission
+        if(!listaAutenticazioni.isAlreadyLogged(name,ip)){
+            player.sendMessage("Login using /login <password>");
             player.sendMessage("Wrong password lead to ip-ban");
+
             DelayedTask task = new DelayedTask(() -> {
-                if(pippoHashMap.isAlreadyLogged(name,ip)){
-                    Bukkit.getLogger().info("OK you stay!!!!!!!!!!!!!!");
 
+                // DOPO il delay...
+                if(listaAutenticazioni.isAlreadyLogged(name,ip)){
+                    // >> Accesso riuscito
+                    //Bukkit.getLogger().info("OK you stay!!!!!!!!!!!!!!");
                     player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.GOLD +"|||||||||||! WELCOME BACK! !|||||||||||"));
-
                 }else{
-                    Bukkit.getLogger().info(">> LOGIN FAILED");
+                    // >> Accesso negato
+                    Bukkit.getLogger().warning(player.getAddress()+"<-----");
+                    listaTentativiAccesso.setListaTentativiAccesso(player.getAddress());
+
                     if((Boolean) GlobalConfig.getConfig().get("RealBan")){
                         Bukkit.banIP(ip);
                         player.kickPlayer("HAHA YOU GOT BANNED!!!!!!!!!!!!!!");
                     }else{
-                        player.kickPlayer("out of here fool!");
+                        player.kickPlayer("Tempo d'accesso terminato!\nTentativo numero: "+listaTentativiAccesso.getListaTentativiAccesso(player.getAddress()));
                     }
                 }
-            },20 * 8);
-            //stop the task before it finish
-            //Bukkit.getScheduler().cancelTask(task.getId());
-            //action after the delay will be executed before the timer end
-        }else{
-            player.setGameMode(GameMode.SURVIVAL);
+
+                //stop the task before it finish
+                //Bukkit.getScheduler().cancelTask(task.getId());
+                //action after the delay will be executed before the timer end
+
+            },20 * tempoMassimoAccesso);
         }
 
-        // Logga il nome dell'utente alla connessione
-        // Bukkit.getLogger().info("Gotcha "+name+":"+ip);
+        player.setGameMode(GameMode.SURVIVAL);
 
         if((Boolean) GlobalConfig.getConfig().get("RealBan")){
             Bukkit.unbanIP(ip);

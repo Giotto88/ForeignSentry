@@ -1,3 +1,12 @@
+TODO:
+- [x] ListaAutenticazioni (IP+USERNAME)(data unix)
+- [ ] ListaIPRegistrati
+- [ ] Implementazione di geo-filtering
+- [ ] Vulnerabile a username con simboli
+
+
+
+
 # Come funziona
 1. Player connesso
 2. Stop movimenti + adventure mode [ connection handler ]
