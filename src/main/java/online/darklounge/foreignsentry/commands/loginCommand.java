@@ -3,6 +3,9 @@ package online.darklounge.foreignsentry.commands;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 
+import online.darklounge.foreignsentry.localDatabase.ListaSessioni;
+import online.darklounge.foreignsentry.localDatabase.ListaTentativiAccesso;
+import online.darklounge.foreignsentry.utility.ConfigManager;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.command.Command;
@@ -12,10 +15,17 @@ import org.bukkit.entity.Player;
 
 import java.util.Objects;
 
-import online.darklounge.foreignsentry.ForeignSentry;
+public class loginCommand implements CommandExecutor {
 
-public class loginCommand extends ForeignSentry implements CommandExecutor {
+    private final ConfigManager GlobalConfig;
+    private final ListaSessioni listaAutenticazioni;
+    private final ListaTentativiAccesso listaTentativiAccesso;
 
+    public loginCommand(ConfigManager globalConfig, ListaSessioni listaAutenticazioni, ListaTentativiAccesso listaTentativiAccesso) {
+        this.GlobalConfig = globalConfig;
+        this.listaAutenticazioni = listaAutenticazioni;
+        this.listaTentativiAccesso = listaTentativiAccesso;
+    }
 
     /**
      * @param sender Oggetto rappresentante il player
@@ -40,7 +50,7 @@ public class loginCommand extends ForeignSentry implements CommandExecutor {
             // ALLORA segna che l'utente si è autenticato con nome e ip e imposta la sua modalità di gioco a survival
             // INOLTRE rimuovi il ban preventivo se l'autenticazione è andata a buon fine
 
-            if ( args.length > 0 && args[0].equals(GlobalConfig.getConfig().get("password")) && !pippoHashMap.isAlreadyLogged(name,ip) ) {
+            if ( args.length > 0 && args[0].equals(GlobalConfig.getConfig().get("password")) && !listaAutenticazioni.isAlreadyLogged(name,ip) ) {
 
                 listaAutenticazioni.aggiungiPlayer(name,ip);
                 for(int i=0;i<2;i++){

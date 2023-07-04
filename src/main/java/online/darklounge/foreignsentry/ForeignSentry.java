@@ -19,6 +19,7 @@ public class ForeignSentry extends JavaPlugin implements Listener {
     protected ListaSessioni listaAutenticazioni;
     protected ListaTentativiAccesso listaTentativiAccesso;
 
+
     @Override
     public void onEnable() {
         // Plugin startup logic
@@ -30,21 +31,22 @@ public class ForeignSentry extends JavaPlugin implements Listener {
         listaTentativiAccesso = new ListaTentativiAccesso();
 
         /* Handler da gestire */
-        new ConnectionHandler(this,(int) GlobalConfig.getConfig().get("tempoMassimoAccesso"));
+        new ConnectionHandler(this,10L,GlobalConfig,listaAutenticazioni,listaTentativiAccesso);
         new DelayedTask(this);
 
         /*
-            TODO: comando per leggere e scrivere questi valori
+            >> comando per leggere e scrivere valori in config
             Get and set to write things on config file
-            Bukkit.getLogger().info("> CONFIG sessionsTimeout: "+GlobalConfig.getConfig().get("sessionsTimeout"));
+
+            GlobalConfig.getConfig().get("sessionsTimeout"));
             GlobalConfig.getConfig().set("hello","world");
             config.save();
          */
 
 
         // Register our command "kit" (set an instance of your command class as executor)
-        Objects.requireNonNull(getCommand("login")).setExecutor(new loginCommand());
-        Objects.requireNonNull(getCommand("fk")).setExecutor(new commonCommand());
+        Objects.requireNonNull(getCommand("login")).setExecutor(new loginCommand(GlobalConfig,listaAutenticazioni,listaTentativiAccesso));
+        Objects.requireNonNull(getCommand("fk")).setExecutor(new commonCommand(GlobalConfig,listaAutenticazioni,listaTentativiAccesso));
     }
 
     @Override

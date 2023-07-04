@@ -1,5 +1,7 @@
 package online.darklounge.foreignsentry.localDatabase;
 
+import org.bukkit.Bukkit;
+
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -28,7 +30,7 @@ public class ListaSessioni {
 
     public boolean isAlreadyLogged(String username, String ip){
         Date currentDate = new Date();
-        return ( currentDate.getTime() - listaAutenticazioni.get(username+":"+ip) ) <  (86400L * durataAutenticazione);
+        return ( listaAutenticazioni.containsKey(username+":"+ip) && (currentDate.getTime() - listaAutenticazioni.get(username+":"+ip) ) <  (86400L * durataAutenticazione) );
     }
 
     /**
@@ -81,7 +83,7 @@ public class ListaSessioni {
         for (Map.Entry<String, Long> entry : listaAutenticazioni.entrySet()) {
             String key = entry.getKey();
             Long value = entry.getValue();
-            System.out.println(key + " : " + value);
+            Bukkit.getLogger().info(key + " : " + value);
         }
     }
 

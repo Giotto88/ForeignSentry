@@ -7,7 +7,7 @@ commands:
   psk:
     description: Magic word to get not banned
     usage: /<command> <password>
-    aliases: [login,password]
+    aliases: [login]
   foreignsentry:
     description: General purpose, ancora da implementare i sotto comandi
     usage: /fk reset

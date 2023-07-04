@@ -4,7 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 
-public class DelayedTask implements Listener{
+public class DelayedTask implements Listener {
     private static Plugin plugin = null;
     private int id = -1;
 

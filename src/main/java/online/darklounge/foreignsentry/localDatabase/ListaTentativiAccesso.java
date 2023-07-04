@@ -1,5 +1,8 @@
 package online.darklounge.foreignsentry.localDatabase;
 
+import org.bukkit.Bukkit;
+
+import java.net.InetAddress;
 import java.util.HashMap;
 import java.net.InetSocketAddress;
 
@@ -10,22 +13,18 @@ import java.net.InetSocketAddress;
  */
 public class ListaTentativiAccesso {
 
-    private final HashMap<InetSocketAddress, Integer> listaTentativiAccesso;
+    private final HashMap<InetAddress, Integer> listaTentativiAccesso;
 
     public ListaTentativiAccesso() {
-        this.listaTentativiAccesso = new HashMap<InetSocketAddress, Integer>();
+        this.listaTentativiAccesso = new HashMap<InetAddress, Integer>();
     }
 
-    public Integer getListaTentativiAccesso(InetSocketAddress x) {
-        return listaTentativiAccesso.get(x);
+    public Integer getListaTentativiAccesso(InetAddress x) {
+        return listaTentativiAccesso.getOrDefault(x, 0);
     }
 
-    public void setListaTentativiAccesso(InetSocketAddress x){
-        if(listaTentativiAccesso.containsKey(x)){
-            listaTentativiAccesso.put(x,listaTentativiAccesso.get(x)+1);
-        }else{
-            listaTentativiAccesso.put(x,1);
-        }
+    public void setListaTentativiAccesso(InetAddress x){
+        listaTentativiAccesso.put(x, (Integer) listaTentativiAccesso.getOrDefault(x, 0)+1);
     }
 
 

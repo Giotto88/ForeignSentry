@@ -4,7 +4,9 @@ import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 
 import online.darklounge.foreignsentry.ForeignSentry;
+import online.darklounge.foreignsentry.localDatabase.ListaSessioni;
 import online.darklounge.foreignsentry.localDatabase.ListaTentativiAccesso;
+import online.darklounge.foreignsentry.utility.ConfigManager;
 import online.darklounge.foreignsentry.utility.DelayedTask;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -16,13 +18,18 @@ import org.bukkit.event.player.PlayerJoinEvent;
 
 import java.util.Objects;
 
-public class ConnectionHandler extends ForeignSentry implements Listener {
+public class ConnectionHandler implements Listener  {
+    private Long tempoMassimoAccesso = 10L;
+    private final ListaSessioni listaAutenticazioni;
+    private final ListaTentativiAccesso listaTentativiAccesso;
+    private final ConfigManager GlobalConfig;
 
-    private final long tempoMassimoAccesso;
-
-    public ConnectionHandler(ForeignSentry plugin,int tempoMassimoAccesso){
+    public ConnectionHandler(ForeignSentry plugin, Long tempoMassimoAccesso,ConfigManager globalConfig, ListaSessioni listaAutenticazioni, ListaTentativiAccesso listaTentativiAccesso) {
         Bukkit.getPluginManager().registerEvents(this, plugin);
         this.tempoMassimoAccesso = tempoMassimoAccesso;
+        this.GlobalConfig = globalConfig;
+        this.listaAutenticazioni = listaAutenticazioni;
+        this.listaTentativiAccesso = listaTentativiAccesso;
     }
 
     /**
@@ -42,6 +49,7 @@ public class ConnectionHandler extends ForeignSentry implements Listener {
         // STEP 2 - secure the world from foreign
         player.setGameMode(GameMode.ADVENTURE);
 
+
         // STEP 3 - check permission
         if(!listaAutenticazioni.isAlreadyLogged(name,ip)){
             player.sendMessage("Login using /login <password>");
@@ -56,14 +64,14 @@ public class ConnectionHandler extends ForeignSentry implements Listener {
                     player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.GOLD +"|||||||||||! WELCOME BACK! !|||||||||||"));
                 }else{
                     // >> Accesso negato
-                    Bukkit.getLogger().warning(player.getAddress()+"<-----");
-                    listaTentativiAccesso.setListaTentativiAccesso(player.getAddress());
+                    Bukkit.getLogger().warning(player.getAddress().getAddress()+"<-----");
+                    listaTentativiAccesso.setListaTentativiAccesso(player.getAddress().getAddress());
 
                     if((Boolean) GlobalConfig.getConfig().get("RealBan")){
                         Bukkit.banIP(ip);
                         player.kickPlayer("HAHA YOU GOT BANNED!!!!!!!!!!!!!!");
                     }else{
-                        player.kickPlayer("Tempo d'accesso terminato!\nTentativo numero: "+listaTentativiAccesso.getListaTentativiAccesso(player.getAddress()));
+                        player.kickPlayer("Tempo d'accesso terminato!\nTentativo numero: "+listaTentativiAccesso.getListaTentativiAccesso(player.getAddress().getAddress()));
                     }
                 }
 
