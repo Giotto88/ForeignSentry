@@ -1,4 +1,4 @@
-package online.darklounge.foreignsentry.utility;
+package online.darklounge.foreignsentry.util;
 
 import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
@@ -16,10 +16,6 @@ public class DelayedTask implements Listener {
         this(runnable, 0);
     }
 
-    /**
-     * @param runnable
-     * @param delay delayTicks is the delay in server ticks (1 tick = 1/20th of a second). For example, to delay for 5 seconds, you would use delayTicks = 5 * 20
-     */
     public DelayedTask(Runnable runnable, long delay){
         if(plugin.isEnabled()){
             id= Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, runnable, delay);
@@ -32,4 +28,3 @@ public class DelayedTask implements Listener {
         return id;
     }
 }
-

@@ -1,14 +1,10 @@
 name: ForeignSentry
 version: '0.1'
 main: online.darklounge.foreignsentry.ForeignSentry
-api-version: 1.19
+api-version: 1.21.3
 authors: [Giotto88]
 commands:
   psk:
     description: Magic word to get not banned
     usage: /<command> <password>
-    aliases: [login]
-  foreignsentry:
-    description: General purpose, ancora da implementare i sotto comandi
-    usage: /fk reset
-    aliases: [fk]
+    aliases: [login,password]

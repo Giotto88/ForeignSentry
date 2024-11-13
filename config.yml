@@ -6,5 +6,3 @@ password: YEET
 # Vuoi eseguire l' ip-ban su chi non inserisce la password in tempo
 # o la inserisce sbagliata?
 RealBan: false
-# Numero di secondi per inserire la passowrd
-tempoMassimoAccesso: 10

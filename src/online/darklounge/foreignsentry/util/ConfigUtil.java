@@ -6,10 +6,6 @@ import org.bukkit.plugin.Plugin;
 
 import java.io.File;
 
-/**
- * Oggetto che si usa per creare e gestire
- * il file di configurazione YAML.
- */
 public class ConfigUtil {
     private File file;
     private FileConfiguration config;
