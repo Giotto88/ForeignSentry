@@ -1,14 +1,11 @@
 package online.darklounge.foreignsentry;
 
-// Java program to demonstrate working of HashTable
-import org.bukkit.Bukkit;
-
 import java.util.HashMap;
+import java.time.Duration;
 import java.util.Date;
 
 public class AuthedUsers {
 
-    // private int NDAY = 5;
 	/**
 	 * NDAY: giorni di validità username:IP
 	 * authRegistry: hashmasp | username:IP | timestamp autenticazione |
@@ -19,32 +16,46 @@ public class AuthedUsers {
     public AuthedUsers() {
     	this.NDAY = (int) ForeignSentry.GlobalConfig.getConfig().get("sessionsTimeout");
         this.authRegistry = new HashMap<>();
-    }
-
-    public AuthedUsers(int NDAY) {
-        this.authRegistry = new HashMap<>();
-        this.NDAY = NDAY;
+        // TODO: prevedere un caso di default in caso di config non funzionante
     }
 
     /**
-     * Aggiungi una entry composta da nome utente più ip all'interno della hashmap
-     * @param username client username
-     * @param ip client ip
+     * Aggiunta key: name:ip value: timestamp unix
+     * @param username Player.name
+     * @param ip Player.ip
      */
     public void addPlayer(String username, String ip){
         Date currentDate = new Date();
-        authRegistry.put(username+":"+ip,currentDate.getTime());
-        Bukkit.getLogger().info(">> LOGIN: "+username+":"+ip+" at: "+currentDate.getTime());
-        //Bukkit.getLogger().info(">> LOGIN: "+username+":"+ip+" at: "+currentDate.getTime());
+        authRegistry.put( username+":"+ip, currentDate.getTime() );
     }
 
+    /**
+     * @param username nome utente
+     * @param ip indirizzo ip
+     * @return boolean SE gia autenticato E se l'ultimo login e' meno di NDAY gg fa
+     */
     public boolean isAlreadyLogged(String username, String ip){
         Date currentDate = new Date();
-        Long lastlogin = authRegistry.get(username+":"+ip);
-        Bukkit.getLogger().info("AUTH STATUS: "+lastlogin);
-        return lastlogin != null && ( currentDate.getTime() - lastlogin ) < (86400L * NDAY);
+        Long lastlogin = authRegistry.get(username + ":" + ip);
+        
+        if (lastlogin == null) {
+            return false; // L'utente non è mai stato loggato con questo IP
+        }
+
+        // Calcola la durata in millisecondi per evitare overflow
+        long maxInterval = Duration.ofDays(NDAY).toMillis();
+
+        // Log per il debug
+        // Bukkit.getLogger().info("[ForeignSentry][DEBUG] " + currentDate.getTime() + " - " + lastlogin);
+
+        return (currentDate.getTime() - lastlogin) <= maxInterval;
     }
 
+    /**
+     * Rimuove la tupla dalla tabella autenticazioni
+     * @param username
+     * @param ip
+     */
     public void removePlayer(String username, String ip){
         authRegistry.remove(username+":"+ip);
     }
