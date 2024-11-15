@@ -29,6 +29,10 @@ Il plugin è stato testato solo su un server vanilla spigot in 1.21.3, per le al
 5. L'utente può autenticarsi con il programma **/psk \<password\>**
 6. Se alla fine del timer l'utente non si è autenticato O ha usato una parolachiave errata viene kickato. 
 7. Se è impostato il flag di Ban il suo IP viene bannato.
+
+### Screenshot
+![Primo Accesso](./readme-src/PrimoAccesso.png)
+![Primo Accesso](./readme-src/SecondoAccesso.png)
  
 
 
