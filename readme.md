@@ -11,23 +11,25 @@ Il plugin è stato testato solo su un server vanilla spigot in 1.21.3, per le al
 ### Wiki comandi
 /psk \<Nome della password in config\>
 
+### Come modificare e/o compilare con l'idee di Eclipse
+1. Installare Eclipse
+2. Fare il clone della repo direttamente nella cartella di workspace
+3. Tasto dx sulla cartella nella finestra *Package Explorer*, tasto dx sulla cartella *ForeignSentry*. Voce *Properties* e selezionare la voce nel menu *Java Build Path*. Selezionare la tab *Libraries* poi *Modulepath*, cliccare sul bottone *Add External JARs...* e selezionare il file spigotApi derivato da Buildtools.
+4. Per compilare, nella finestra *Package Explorer*, tasto dx sulla cartella *ForeignSentry*, voce *Export..*.
+5. Selezionare Java > JAR file, next, selezionare solo .classpath, config.yml, plugin.yml.
+6. Selezionare dove scrivere il file compilato.
+
 
 
 ### Come funziona
-1. Player connesso
-2. Stop movimenti + adventure mode [ connection handler ]
-3. < È tra gli utenti già autenticati da meno di 5gg ? > [ connection handler ]
-
-    1. SE SI...
-        1. rimuovi blocco movimento e adventure mode [ connection handler ]
-    2. SE NO...
-       1. < PASSWORD RICHIESTA > [ psk ]
-          1. PASSWORD CORRETTA [ psk ]
-             1. Rimuovi blocco movimento e adventure mode [ psk ]
-             2. Aggiunto tra gli account autenticati [ psk ]
-          2. PASSWORD ERRATA [ psk ]
-             1. Kick dell'utente fuori dal server [ psk ]
-             2. Aggiunto al registro dell'attività sospetta [ psk ]
+1. Il player si connette e spawna
+2. Viene messo il modalità adventure
+3. Se l'utente si era già autenticato prima di 5gg viene messo nella modalità di gioco precedente.
+4. Se l'utente non si era autenticato parte un timer di X secondi definito dal config.
+5. L'utente può autenticarsi con il programma **/psk \<password\>**
+6. Se alla fine del timer l'utente non si è autenticato O ha usato una parolachiave errata viene kickato. 
+7. Se è impostato il flag di Ban il suo IP viene bannato.
+ 
 
 
 <!-- TODO:
